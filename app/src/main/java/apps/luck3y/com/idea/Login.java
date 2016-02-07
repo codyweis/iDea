@@ -1,5 +1,6 @@
 package apps.luck3y.com.idea;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -44,8 +45,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
                 authenticate(user);
 
-                userLocalData.storeUserData(user);
-                userLocalData.setUserLoggedIn(true);
                 break;
 
             case R.id.btnCrtAcnt2:
@@ -60,8 +59,27 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         serverRequest.getUserDataInBackground(user, new GetUserCallBack() {
             @Override
             public void done(User returnUser) {
-
+                if(returnUser == null){
+                    showErrorMessage();
+                }
+                else{
+                    logUserIn(returnUser);
+                }
             }
         });
+    }
+
+    private void showErrorMessage(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(Login.this);
+        dialogBuilder.setMessage("Incorrect user details");
+        dialogBuilder.setPositiveButton("Ok", null);
+        dialogBuilder.show();
+    }
+
+    private void logUserIn(User returnUser){
+        userLocalData.storeUserData(returnUser);
+        userLocalData.setUserLoggedIn(true);
+        startActivity(new Intent(this, MainActivity.class));
+
     }
 }

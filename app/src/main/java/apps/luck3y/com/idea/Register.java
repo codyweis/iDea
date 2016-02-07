@@ -1,5 +1,6 @@
 package apps.luck3y.com.idea;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -43,8 +44,18 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                 String email = txtRegEmail.getText().toString();
 
                 User newUser = new User(fname, lname, password, username, email);
-
+                registerUser(newUser);
                 break;
         }
+    }
+
+    private void registerUser(User newUser){
+        ServerRequest serverRequest = new ServerRequest(this);
+        serverRequest.storeUserDataInBackground(newUser, new GetUserCallBack() {
+            @Override
+            public void done(User returnUser) {
+                startActivity(new Intent(Register.this, Login.class));
+            }
+        });
     }
 }
