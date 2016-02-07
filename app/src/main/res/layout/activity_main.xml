@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="apps.luck3y.com.idea.MainActivity"
+    android:background="#248baa"
+    android:paddingTop="20dp">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:id="@+id/btnLogn1"
+        android:minHeight="60dp"
+        android:minWidth="200dp"
+        android:textColor="#248baa"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Account"
+        android:id="@+id/btnCrtAcnt1"
+        android:textColor="#709eac"
+        android:textSize="10dp"
+        android:minHeight="20dp"
+        android:layout_below="@+id/btnLogn1"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>
