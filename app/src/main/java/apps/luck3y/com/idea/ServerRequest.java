@@ -2,11 +2,7 @@ package apps.luck3y.com.idea;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Entity;
 import android.os.AsyncTask;
-
-import com.android.internal.http.multipart.MultipartEntity;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -22,8 +18,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Cody Weisenberger on 2/6/2016.
@@ -33,7 +27,7 @@ public class ServerRequest {
     //creates loading bar as well as time until a timeout and server address to access php files
     ProgressDialog progressDialog;
     public static final int CONNECTION_TIMEOUT = 1000*15;
-    public static final String SERVER_ADDRESS = "localhost:8080";
+    public static final String SERVER_ADDRESS = "http://10.0.2.2:8080/iDea/";
 
     //instantiate progress dialog
     public ServerRequest(Context context){
@@ -43,7 +37,7 @@ public class ServerRequest {
         progressDialog.setMessage("......");
     }
 
-
+    //once called, start async task and pass it user and callback
     public void storeUserDataInBackground(User user, GetUserCallBack userCallBack){
         progressDialog.show();
         new StoreUserDataAsyncTask(user, userCallBack).execute();
@@ -54,7 +48,11 @@ public class ServerRequest {
         new fetchUserDataAsyncTask(user, callBack).execute();
     }
 
-    //background task
+    //start background task (In Android: Async Class) passing in user and callback
+    //<void,    ,    > -->Sending to constructor instead of async task
+    //<   , void,   > --> how it receives the progress dialog, dont need to receive progress dialog,
+    // simply starting when async task starts and closes when it finishes
+    //<   ,   , void> --> what async returns
     public class StoreUserDataAsyncTask extends AsyncTask<Void, Void, Void>{
         User user;
         GetUserCallBack userCallBack;
@@ -63,6 +61,8 @@ public class ServerRequest {
             this.user = user;
             this.userCallBack = userCallBack;
         }
+
+        //once async starts, do this in background and access server
         @Override
         protected Void doInBackground(Void... params) {
             ArrayList<NameValuePair> dataToSend = new ArrayList();
@@ -85,10 +85,10 @@ public class ServerRequest {
             }catch(Exception e){
                 e.printStackTrace();
             }
-
             return null;
         }
 
+        //once async is finished
         @Override
         protected void onPostExecute(Void aVoid) {
             progressDialog.dismiss();
@@ -98,6 +98,7 @@ public class ServerRequest {
         }
     }
 
+    //getting user data, return a user
     public class fetchUserDataAsyncTask extends AsyncTask<Void, Void, User> {
         User user;
         GetUserCallBack userCallBack;
@@ -135,8 +136,9 @@ public class ServerRequest {
                 else{
                     String fname = jObject.getString("fname");
                     String lname = jObject.getString("lname");
+                    String email = jObject.getString("email");
 
-                    returnedUser = new User(fname, lname, user.username, user.password, user.email);
+                    returnedUser = new User(fname, lname, user.username, user.password, email);
 
                 }
 
@@ -150,7 +152,6 @@ public class ServerRequest {
         protected void onPostExecute(User returnedUser) {
             progressDialog.dismiss();
             userCallBack.done(returnedUser);
-
             super.onPostExecute(returnedUser);
         }
     }

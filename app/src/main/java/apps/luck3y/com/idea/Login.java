@@ -24,7 +24,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
 
         txtUsrnm = (EditText) findViewById(R.id.txtUsrnm);
         txtPswrd = (EditText) findViewById(R.id.txtPswrd);
-
         btnAcpt = (Button) findViewById(R.id.btnAcpt);
         btnCrtAcnt2 = (Button) findViewById(R.id.btnCrtAcnt2);
 
@@ -54,6 +53,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
+    //see if username and passwwrod are in database
     private void authenticate(User user){
         ServerRequest serverRequest = new ServerRequest(this);
         serverRequest.getUserDataInBackground(user, new GetUserCallBack() {
