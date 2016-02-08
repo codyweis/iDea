@@ -10,7 +10,7 @@
 ///**
 // * Created by Cody Weisenberger on 2/5/2016.
 // */
-//public class Register extends AppCompatActivity implements View.OnClickListener{
+//public class RegisterCopy extends AppCompatActivity implements View.OnClickListener{
 //
 //    Button btnRegstr;
 //    EditText txtRegUsrnm, txtRegFrst, txtRegLst, txtRegPswrd, txtRegPswrdCnfrm, txtRegEmail;
@@ -54,7 +54,7 @@
 //        serverRequest.storeUserDataInBackground(newUser, new GetUserCallBack() {
 //            @Override
 //            public void done(User returnUser) {
-//                startActivity(new Intent(Register.this, Login.class));
+//                startActivity(new Intent(RegisterCopy.this, Login.class));
 //            }
 //        });
 //    }

@@ -24,6 +24,9 @@
         <activity
             android:name=".Register">
         </activity>
+        <activity
+            android:name=".Home">
+        </activity>
     </application>
 
 </manifest>

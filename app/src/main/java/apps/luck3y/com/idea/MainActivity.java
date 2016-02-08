@@ -11,7 +11,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     EditText txtUsrnm, txtPswrd;
     Button btnLogn1, btnCrtAcnt1;
-    UserLocalData userLocalData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,28 +22,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnLogn1.setOnClickListener(this);
         btnCrtAcnt1.setOnClickListener(this);
-
-        userLocalData = new UserLocalData(this);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        if(authenticate() == true){
-            displayUserDetails();
-        }
-    }
-
-    private boolean authenticate(){
-        return userLocalData.isUserLoggedIn();
-    }
-
-    private void displayUserDetails(){
-        User user = userLocalData.getUserLoggedIn();
-
-        txtUsrnm.setText(user.username);
-        txtPswrd.setText(user.password);
     }
 
     @Override
@@ -54,10 +36,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(new Intent(this, Login.class));
 
                 break;
-            case R.id.btnCrtAcnt1:
-                startActivity(new Intent(this, Register.class));
-
-                break;
+//            case R.id.btnCrtAcnt1:
+//                startActivity(new Intent(this, Register.class));
+//
+//                break;
         }
     }
 }
