@@ -9,6 +9,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * Created by Cody Weisenberger on 2/8/2016.
@@ -16,15 +18,30 @@ import android.widget.Button;
 public class Home extends AppCompatActivity implements View.OnClickListener{
 
     Button btnLgout;
+    TextView test1;
+    TextView test2;
+    TextView test3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        test1 = (TextView) findViewById(R.id.test1);
+        test2 = (TextView) findViewById(R.id.test2);
+        test3 = (TextView) findViewById(R.id.test3);
+
         btnLgout = (Button) findViewById(R.id.btnLgout);
 
+        SharedPreferences sharedPreferences = getSharedPreferences(Config.sharedPref, Context.MODE_PRIVATE);
+        String username = sharedPreferences.getString(Config.username, "Error");
+        String password = sharedPreferences.getString(Config.password, "Error");
+
+        test2.setText("Username: " + username);
+        test3.setText("Password: " + password);
+
         btnLgout.setOnClickListener(this);
+
     }
 
     @Override
@@ -33,6 +50,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
             case R.id.btnLgout:
                 logUserOut();
         }
+    }
+
+    private void displayUser(){
 
     }
 

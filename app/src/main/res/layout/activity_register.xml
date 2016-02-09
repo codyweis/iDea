@@ -52,7 +52,10 @@
         android:id="@+id/txtRegPswrdCnfrm"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:hint="Confirm Password" />
+        android:hint="Confirm Password"
+        android:editable="false"
+        android:enabled="false"
+        android:visibility="invisible" />
 
     <EditText
         android:layout_width="fill_parent"

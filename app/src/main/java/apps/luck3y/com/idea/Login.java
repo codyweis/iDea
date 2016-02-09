@@ -81,7 +81,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                             //add values
                             editor.putBoolean(Config.sharedPrefBool, true);
                             editor.putString(Config.username, username);
-
+                            editor.putString(Config.password, password);
                             editor.commit();
 
                             Intent intent = new Intent(Login.this, Home.class);
@@ -123,13 +123,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.btnAcpt:
-
                 login();
-
-//            case R.id.btnCrtAcnt2:
-//                startActivity(new Intent(this, Register.class));
-//
-//                break;
+                break;
+            case R.id.btnCrtAcnt2:
+                startActivity(new Intent(this, Register.class));
+                break;
         }
     }
 }
