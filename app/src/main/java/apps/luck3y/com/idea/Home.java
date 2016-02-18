@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,41 +20,27 @@ import android.widget.TextView;
 public class Home extends AppCompatActivity implements View.OnClickListener{
 
     Button btnLgout;
-    TextView test1;
+
+    TextView test;
     TextView test2;
-    TextView test3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        test1 = (TextView) findViewById(R.id.test1);
+        test = (TextView) findViewById(R.id.test);
         test2 = (TextView) findViewById(R.id.test2);
-        test3 = (TextView) findViewById(R.id.test3);
+        btnLgout = (Button) findViewById(R.id.btnlgout);
 
-        btnLgout = (Button) findViewById(R.id.btnLgout);
+        btnLgout.setOnClickListener(this);
 
         SharedPreferences sharedPreferences = getSharedPreferences(Config.sharedPref, Context.MODE_PRIVATE);
         String username = sharedPreferences.getString(Config.username, "Error");
         String password = sharedPreferences.getString(Config.password, "Error");
 
-        test2.setText("Username: " + username);
-        test3.setText("Password: " + password);
-
-        btnLgout.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.btnLgout:
-                logUserOut();
-        }
-    }
-
-    private void displayUser(){
+        test.setText("Username: " + username);
+        test2.setText("Password: " + password);
 
     }
 
@@ -89,4 +77,30 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+
+//    //create menu option in toolbar
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu, menu);
+//        return true;
+//    }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        int id = item.getItemId();
+//        if(id == R.id.menuLogout){
+//            logUserOut();
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.btnlgout:
+                logUserOut();
+                break;
+        }
+    }
+
 }

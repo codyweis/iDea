@@ -58,7 +58,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         // if logged in
         if(isLoggedIn){
             //start new activity
-            Intent intent = new Intent(this, Home.class);
+            Intent intent = new Intent(Login.this, Home.class);
             startActivity(intent);
         }
     }
@@ -69,7 +69,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         final String password = txtPswrd.getText().toString().trim();
 
         //create string request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS+"GetUserData.php",
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "Login.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
