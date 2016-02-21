@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    android:background="#248baa">
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="My Account"
+        android:id="@+id/txtViewAcnt"
+        android:layout_gravity="center_horizontal|left"
+        android:paddingLeft="20dp"
+        android:textSize="20dp"
+        android:paddingTop="15dp"
+        android:textColor="#185a6e"
+        android:background="#cfe5eb"
+        android:paddingBottom="15dp"
+        android:clickable="true" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Inbox"
+        android:id="@+id/txtViewInbx"
+        android:layout_gravity="center_horizontal|left"
+        android:paddingLeft="20dp"
+        android:textSize="20dp"
+        android:paddingTop="15dp"
+        android:textColor="#185a6e"
+        android:background="#cfe5eb"
+        android:paddingBottom="15dp"
+        android:clickable="true" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Sent"
+        android:id="@+id/txtViewSnt"
+        android:layout_gravity="center_horizontal|left"
+        android:paddingLeft="20dp"
+        android:textSize="20dp"
+        android:paddingTop="15dp"
+        android:textColor="#185a6e"
+        android:background="#cfe5eb"
+        android:paddingBottom="15dp"
+        android:clickable="true" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Posts"
+        android:id="@+id/txtViewPsts"
+        android:layout_gravity="center_horizontal|left"
+        android:paddingLeft="20dp"
+        android:textSize="20dp"
+        android:paddingTop="15dp"
+        android:textColor="#185a6e"
+        android:background="#cfe5eb"
+        android:paddingBottom="15dp"
+        android:clickable="true" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/test"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textColor="#1851a6"
+        android:textSize="20dp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/test2"
+        android:textColor="#185a6e"
+        android:textSize="20dp"
+        android:layout_marginBottom="50dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:id="@+id/btnlgout"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#248baa" />
+
+</LinearLayout>

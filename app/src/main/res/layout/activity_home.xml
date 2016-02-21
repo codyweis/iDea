@@ -1,29 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
-    <TextView
+    <Button
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/test"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:textColor="#1851a6"
-        android:textSize="20dp" />
+        android:text="Profile"
+        android:id="@+id/btnProfile"
+        android:textColor="#248baa" />
 
-    <TextView
+    <Button
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/test2"
+        android:text="Logout"
+        android:id="@+id/btnLgout"
         android:layout_gravity="center_horizontal"
-        android:textColor="#1851a6"
-        android:textSize="20dp" />
+        android:textColor="#248baa"
+        android:layout_marginBottom="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Create Post"
+        android:id="@+id/textView"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#248baa"
+        android:layout_marginBottom="20dp"
+        android:singleLine="false"
+        android:paddingTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Select Topic:"
+        android:id="@+id/textView2"
+        android:textColor="#248baa"
+        android:layout_marginBottom="-25dp"
+        android:layout_marginLeft="10dp" />
+
+    <Spinner
+        android:layout_width="fill_parent"
+        android:layout_height="30dp"
+        android:id="@+id/topic_dropdown"
+        android:layout_gravity="center_horizontal"
+        android:spinnerMode="dropdown"
+        android:dropDownSelector="#248baa"
+        android:layout_marginBottom="10dp"
+        android:focusable="false"
+        android:popupBackground="#248baa"
+        android:background="#3b248baa"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="35dp" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/ideaPost"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+        android:padding="5dp"
+        android:paddingRight="5dp"
+        android:background="@drawable/back"
+        android:layout_weight="0.55"
+        android:textSize="12dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Logout"
-        android:id="@+id/btnlgout"
-        android:layout_gravity="center_horizontal" />
+        android:text="Sumbit Post"
+        android:id="@+id/btnSbmtPst"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textColor="#248baa" />
+
 </LinearLayout>

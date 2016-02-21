@@ -27,6 +27,12 @@
         <activity
             android:name=".Home">
         </activity>
+        <activity
+            android:name=".Account">
+        </activity>
+        <activity
+            android:name=".Profile">
+        </activity>
     </application>
 
 </manifest>

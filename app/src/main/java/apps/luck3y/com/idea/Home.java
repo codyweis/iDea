@@ -10,38 +10,141 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by Cody Weisenberger on 2/8/2016.
  */
-public class Home extends AppCompatActivity implements View.OnClickListener{
+public class Home extends AppCompatActivity implements View.OnClickListener, Spinner.OnItemSelectedListener{
 
     Button btnLgout;
+    Button btnPrfile;
+    Button btnSbmitPst;
 
-    TextView test;
-    TextView test2;
+    EditText ideaPost;
+
+    Spinner spinner;
+    ArrayList<String> topics;
+    JSONArray result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        test = (TextView) findViewById(R.id.test);
-        test2 = (TextView) findViewById(R.id.test2);
-        btnLgout = (Button) findViewById(R.id.btnlgout);
+        ideaPost = (EditText) findViewById(R.id.ideaPost);
+        btnSbmitPst = (Button) findViewById(R.id.btnSbmtPst);
+        btnLgout = (Button) findViewById(R.id.btnLgout);
+        btnPrfile = (Button) findViewById(R.id.btnProfile);
+        spinner = (Spinner) findViewById(R.id.topic_dropdown);
 
+        topics = new ArrayList<String>();
+
+        btnSbmitPst.setOnClickListener(this);
         btnLgout.setOnClickListener(this);
+        btnPrfile.setOnClickListener(this);
+        spinner.setOnItemSelectedListener(this);
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Config.sharedPref, Context.MODE_PRIVATE);
-        String username = sharedPreferences.getString(Config.username, "Error");
-        String password = sharedPreferences.getString(Config.password, "Error");
+        getData();
 
-        test.setText("Username: " + username);
-        test2.setText("Password: " + password);
+    }
 
+    private void getData(){
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Config.SERVER_ADDRESS + "GetTopics.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jsonObject = null;
+                        try {
+                            //json string to jsonobject
+                            jsonObject = new JSONObject(response);
+
+                            //get json sstring created in php and store to JSON Array
+                            result = jsonObject.getJSONArray(Config.json_array);
+
+                            //get topics from json array
+                            getTopics(result);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+
+        requestQueue.add(stringRequest);
+    }
+
+    private void getTopics(JSONArray jsonArray){
+        //go through items in array
+        for(int i = 0; i < jsonArray.length(); i++) {
+            try {
+                //get json object
+                JSONObject json = jsonArray.getJSONObject(i);
+
+                //add topic to arraylist
+                topics.add(json.getString(Config.topic_title));
+            } catch (JSONException e) {
+
+            }
+        }
+            //set adapter to show items in the dropdown
+            spinner.setAdapter(new ArrayAdapter<String>(Home.this, android.R.layout.simple_selectable_list_item, topics));
+    }
+
+    //topic name of position
+    private String getTopicTitle(int position){
+        String title="";
+        try {
+            //get object of index
+            JSONObject json = result.getJSONObject(position);
+
+            //get title from object
+            title = json.getString(Config.topic_title);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //Returning the name
+        return title;
+    }
+
+    //execute when item selected from dropdown
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        //// TODO: 2/17/2016
+
+    }
+
+    //no item selected
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        //// TODO: 2/17/2016
     }
 
     private void logUserOut(){
@@ -97,9 +200,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.btnlgout:
+            case R.id.btnLgout:
                 logUserOut();
                 break;
+            case R.id.btnProfile:
+                startActivity(new Intent(this, Profile.class));
+                break;
+            case R.id.btnSbmtPst:
+                Toast.makeText(Home.this, "Doesnt work yet:D", Toast.LENGTH_LONG).show();
         }
     }
 
