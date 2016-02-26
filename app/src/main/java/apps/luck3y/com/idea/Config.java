@@ -27,6 +27,13 @@ public class Config {
    //Check server response is equal to this string from php file
     public static final String logInMessage = "connected";
 
+    //check server response is equal to createdPost messessage
+    public static final String postCreated = "created";
+
+    //rest of createpost vars
+    public static final String content = "content";
+    //public static final int topic = "topic_id";
+
     //Sharedpreferences
     public static final String sharedPref = "sharedPref";
 
