@@ -15,6 +15,12 @@ public class Config {
     public static final String lname = "lname";
     public static final String email = "email";
 
+    //register variables
+    public static final String registered = "successful";
+    public static final String regerror = "Could not register";
+    public static final String usererror = "Username already registered";
+    public static final String emailerror = "Email already registered";
+
     //variables for gettopics
     public static final String topic_id = "topic_id";
     public static final String topic_title = "title";
