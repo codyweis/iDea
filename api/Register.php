@@ -20,11 +20,11 @@
 		$check_email = mysqli_num_rows($run_email);
 		
 		if($check_username == 1){
-			echo "This username is already taken";
+			echo "Username already registered";
 			exit();
 		}
 		if($check_email == 1){
-			echo "This email is already registered";
+			echo "Email already registered";
 			exit();
 		}
 
