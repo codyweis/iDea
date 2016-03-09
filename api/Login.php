@@ -1,22 +1,29 @@
 <?php
 session_start();
 	if($_SERVER['REQUEST_METHOD'] == 'POST'){
+	
+		require_once('connect.inc.php');
+		 
+		$sql = "SELECT username, password FROM USER WHERE username = ?";
 		
+		$stmt = $conn->prepare($sql);
+
 		$username = $_POST["username"];
 		$password = $_POST["password"];
+
+		$stmt->bind_param("s", $username);
+
+		$stmt->execute();
 		
-		$sql = "SELECT * FROM USER WHERE username = '$username'";
-		
-		require_once('connect.inc.php');
-		
-		$result = mysqli_query($conn, $sql);
-		$row = mysqli_fetch_array($result);
-		$verify = password_verify($password, $row[4]);
-		
+		$stmt->bind_result($user, $pass);
+
+		while($stmt->fetch()){
+			$verify = password_verify($password, $pass);
+		}
+
 		if($verify){
 			$_SESSION["username"] = $username;
 			echo 'connected';
-			echo session_id();
 		}else{
 			echo 'check details';
 		}
