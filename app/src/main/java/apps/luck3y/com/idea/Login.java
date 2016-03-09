@@ -63,7 +63,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         }
     }
 
-
     private void login(){
         final String username = txtUsrnm.getText().toString().trim();
         final String password = txtPswrd.getText().toString().trim();
@@ -73,7 +72,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(response.equalsIgnoreCase(Config.logInMessage)){
+                        String responseOne = response.substring(0,9);
+                        String responseTwo = response.substring(9);
+                        if(responseOne.equalsIgnoreCase(Config.logInMessage)){
                             //create shared pref
                             SharedPreferences sharedPreferences = Login.this.getSharedPreferences(Config.sharedPref, Context.MODE_PRIVATE);
                             //editor stores values to the shared pref
@@ -82,6 +83,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                             editor.putBoolean(Config.sharedPrefBool, true);
                             editor.putString(Config.username, username);
                             editor.putString(Config.password, password);
+                            editor.putString(Config.SID, responseTwo);
                             editor.commit();
 
                             Intent intent = new Intent(Login.this, Home.class);

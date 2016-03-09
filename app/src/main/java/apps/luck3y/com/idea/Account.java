@@ -101,12 +101,19 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
         alertDialog.show();
     }
 
-    //SessionId sessionId = new SessionId();
+
     private void getUserData() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, Config.SERVER_ADDRESS + "GetUserData.php?PHPSESSID=" + "",
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Config.sharedPref, Context.MODE_PRIVATE);
+        String sessionId = sharedPreferences.getString(Config.SID, "SessionID");
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Config.SERVER_ADDRESS + "GetUserData.php?PHPSESSID=" + sessionId,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if(response.equalsIgnoreCase("hi")){
+
+                        }
                         JSONObject jsonObject = null;
                         try {
                             //json string to jsonobject
@@ -143,7 +150,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
 
             }
         }
-        //getFname.setText(userInfo.indexOf(2));
+        getFname.setText(userInfo.indexOf(2));
     }
 
 

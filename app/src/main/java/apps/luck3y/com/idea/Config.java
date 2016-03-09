@@ -5,6 +5,9 @@ package apps.luck3y.com.idea;
  */
 public class Config {
 
+    //session id
+    public static final String SID = "SessionID";
+
     //database
     public static final String SERVER_ADDRESS = "http://ideaapp.esy.es/";
 
@@ -38,7 +41,7 @@ public class Config {
 
     //rest of createpost vars
     public static final String content = "content";
-    //public static final int topic = "topic_id";
+    public static final String topic = "topic_id";
 
     //Sharedpreferences
     public static final String sharedPref = "sharedPref";

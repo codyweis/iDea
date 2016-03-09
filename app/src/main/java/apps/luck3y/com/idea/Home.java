@@ -77,6 +77,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        if(response.equalsIgnoreCase("hi")){
+
+                        }
                         JSONObject jsonObject = null;
                         try {
                             //json string to jsonobject
@@ -151,46 +154,49 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
     }
 
     ////TODO: 2/26/2016
-//    private void insertPost(){
-//        final String postText = ideaPost.getText().toString().trim();
-//        final int topicTitle = spinner.getSelectedItemPosition();
-//
-//        //create string request
-//        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "CreatePost.php",
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        Toast.makeText(Home.this, "Posted", Toast.LENGTH_LONG).show();
-//                        Intent intent = new Intent(Home.this, Account.class);
-//                        startActivity(intent);
-//                    }
-//                },
-//                new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(Home.this, error.toString(), Toast.LENGTH_LONG).show();
-//                    }
-//                }){
-//            @Override
-//            protected Map<String, String> getParams() throws AuthFailureError {
-//                //from android.com: A Map is a data structure consisting of a set of keys and
-//                // values in which each key is mapped to a single value. The class of the objects
-//                // used as keys is declared when the Map is declared, as is the class of the
-//                // corresponding values.
-//                Map<String,String> hashMap = new HashMap<>();
-//
-//                //maps specified string key, username and password, to specified string value
-//               // hashMap.put(Config.topic, topicTitle);
-//                hashMap.put(Config.content, postText);
-//
-//                return hashMap;
-//            }
-//        };
-//
-//        //add string request to queue
-//        RequestQueue requestQueue = Volley.newRequestQueue(this);
-//        requestQueue.add(stringRequest);
-//    }
+    private void insertPost(){
+        final String postText = ideaPost.getText().toString().trim();
+        final String topicTitle = spinner.getSelectedItem().toString();
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Config.sharedPref, Context.MODE_PRIVATE);
+        String sessionId = sharedPreferences.getString(Config.SID, "SessionID");
+
+        //create string request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "CreatePost.php?PHPSESSID=" + sessionId,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Toast.makeText(Home.this, "Posted", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(Home.this, Account.class);
+                        startActivity(intent);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(Home.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //from android.com: A Map is a data structure consisting of a set of keys and
+                // values in which each key is mapped to a single value. The class of the objects
+                // used as keys is declared when the Map is declared, as is the class of the
+                // corresponding values.
+                Map<String,String> hashMap = new HashMap<>();
+
+                //maps specified string key, username and password, to specified string value
+                hashMap.put(Config.topic, topicTitle);
+                hashMap.put(Config.content, postText);
+
+                return hashMap;
+            }
+        };
+
+        //add string request to queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
 
     private void logUserOut(){
         //Creating an alert dialog to confirm logout
@@ -252,7 +258,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.btnSbmtPst:
-                //insertPost();
+                insertPost();
         }
     }
 
