@@ -57,15 +57,15 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(response.equalsIgnoreCase(Config.registered)) {
+                        if(response.trim().equalsIgnoreCase(Config.registered)) {
                             Toast.makeText(Register.this, "successful", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(Register.this, Login.class);
                             startActivity(intent);
                         }
-                        else if(response.equalsIgnoreCase(Config.usererror)){
+                        else if(response.trim().equalsIgnoreCase(Config.usererror)){
                             Toast.makeText(Register.this, "Username already registered", Toast.LENGTH_LONG).show();
                         }
-                        else if(response.equalsIgnoreCase(Config.emailerror)){
+                        else if(response.trim().equalsIgnoreCase(Config.emailerror)){
                             Toast.makeText(Register.this, "Email already registered", Toast.LENGTH_LONG).show();
                         }
                         else{
