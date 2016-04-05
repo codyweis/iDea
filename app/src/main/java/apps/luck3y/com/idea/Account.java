@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -26,6 +27,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
+import java.net.CookieStore;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +47,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
     TextView getLname;
     TextView getUsername;
     TextView getEmail;
-    TextView getPassword;
+
 
     ArrayList<String> userInfo;
     JSONArray result;
@@ -54,7 +60,6 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
         getFname = (TextView) findViewById(R.id.getFname);
         getLname = (TextView) findViewById(R.id.getLname);
         getUsername = (TextView) findViewById(R.id.getUsername);
-        getPassword = (TextView) findViewById(R.id.getPassword);
         getEmail = (TextView) findViewById(R.id.getEmail);
 
         userInfo = new ArrayList<String>();
@@ -108,22 +113,23 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
         String sessionId = sharedPreferences.getString(Config.SID, "SessionID");
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, Config.SERVER_ADDRESS + "GetUserData.php?PHPSESSID=" + sessionId,
+
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(response.equalsIgnoreCase("hi")){
-
-                        }
                         JSONObject jsonObject = null;
                         try {
+
                             //json string to jsonobject
                             jsonObject = new JSONObject(response);
 
+
                             //get json sstring created in php and store to JSON Array
-                            result = jsonObject.getJSONArray(Config.json_array);
+                            result = jsonObject.getJSONArray(Config.json_array_user);
 
                             //get username from json array
                             getUserInfo(result);
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -134,23 +140,41 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
                     public void onErrorResponse(VolleyError error) {
 
                     }
-                });
 
+                });
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
 
     private void getUserInfo(JSONArray jsonArray){
-        for(int i = 0; i < jsonArray.length(); i++) {
+            for(int i = 0; i < jsonArray.length(); i++) {
             try {
                 JSONObject json = jsonArray.getJSONObject(i);
 
                 userInfo.add(json.getString(Config.getUsername));
+                userInfo.add(json.getString(Config.getfname));
+                userInfo.add(json.getString(Config.getlname));
+                userInfo.add(json.getString(Config.getemail));
+
             } catch (JSONException e) {
 
             }
         }
-        getFname.setText(userInfo.indexOf(2));
+
+        for(int i = 0; i < userInfo.size(); i++){
+            switch(i){
+                case 0: getUsername.setText(userInfo.get(i));
+                    System.out.println("here2 "+i);
+                    break;
+                case 1: getFname.setText(userInfo.get(i));
+                    System.out.println("here2 " + i);
+                    break;
+                case 2: getLname.setText(userInfo.get(i));
+                    break;
+                case 3: getEmail.setText(userInfo.get(i));
+                    break;
+            }
+        }
     }
 
 

@@ -77,9 +77,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        if(response.equalsIgnoreCase("hi")){
-
-                        }
                         JSONObject jsonObject = null;
                         try {
                             //json string to jsonobject
@@ -156,18 +153,21 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
     ////TODO: 2/26/2016
     private void insertPost(){
         final String postText = ideaPost.getText().toString().trim();
+
+        //gets topic title from drop down and puts in string
         final String topicTitle = spinner.getSelectedItem().toString();
 
         SharedPreferences sharedPreferences = getSharedPreferences(Config.sharedPref, Context.MODE_PRIVATE);
-        String sessionId = sharedPreferences.getString(Config.SID, "SessionID");
+        final String username = sharedPreferences.getString(Config.username, "username");
+        //String sessionId = sharedPreferences.getString(Config.SID, "SessionID");
 
         //create string request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "CreatePost.php?PHPSESSID=" + sessionId,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "CreatePost.php",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Toast.makeText(Home.this, "Posted", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(Home.this, Account.class);
+                        Intent intent = new Intent(Home.this, Profile.class);
                         startActivity(intent);
                     }
                 },
@@ -187,6 +187,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
 
                 //maps specified string key, username and password, to specified string value
                 hashMap.put(Config.topic, topicTitle);
+                hashMap.put(Config.username, username);
                 hashMap.put(Config.content, postText);
 
                 return hashMap;

@@ -28,10 +28,15 @@ public class Config {
     public static final String topic_id = "topic_id";
     public static final String topic_title = "title";
 
+    //variables for getuserdata
     public static final String getUsername = "username";
+    public static final String getfname = "fname";
+    public static final String getlname = "lname";
+    public static final String getemail = "email";
 
     //json array
     public static final String json_array = "result";
+    public static final String json_array_user = "resultUser";
 
    //Check server response is equal to this string from php file
     public static final String logInMessage = "connected";
@@ -41,7 +46,7 @@ public class Config {
 
     //rest of createpost vars
     public static final String content = "content";
-    public static final String topic = "topic_id";
+    public static final String topic = "topic";
 
     //Sharedpreferences
     public static final String sharedPref = "sharedPref";

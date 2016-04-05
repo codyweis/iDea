@@ -8,6 +8,19 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/getUsername"
+        android:layout_gravity="center_horizontal|left"
+        android:paddingLeft="20dp"
+        android:textSize="20dp"
+        android:paddingTop="15dp"
+        android:textColor="#185a6e"
+        android:background="#cfe5eb"
+        android:paddingBottom="15dp"
+        android:clickable="false" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/getFname"
         android:layout_gravity="center_horizontal|left"
         android:paddingLeft="20dp"
@@ -34,34 +47,8 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/getUsername"
-        android:layout_gravity="center_horizontal|left"
-        android:paddingLeft="20dp"
-        android:textSize="20dp"
-        android:paddingTop="15dp"
-        android:textColor="#185a6e"
-        android:background="#cfe5eb"
-        android:paddingBottom="15dp"
-        android:clickable="false" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/getEmail"
         android:layout_gravity="center_horizontal|left"
-        android:paddingLeft="20dp"
-        android:textSize="20dp"
-        android:paddingTop="15dp"
-        android:textColor="#185a6e"
-        android:background="#cfe5eb"
-        android:paddingBottom="15dp"
-        android:clickable="false" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/getPassword"
-        android:layout_gravity="center_horizontal"
         android:paddingLeft="20dp"
         android:textSize="20dp"
         android:paddingTop="15dp"
