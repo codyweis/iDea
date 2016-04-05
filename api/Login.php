@@ -1,6 +1,8 @@
 <?php
 session_start();
 	if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+		$sessionid = session_id();
 	
 		require_once('connect.inc.php');
 		 
@@ -24,6 +26,7 @@ session_start();
 		if($verify){
 			$_SESSION["username"] = $username;
 			echo 'connected';
+			echo $sessionid;
 		}else{
 			echo 'check details';
 		}
