@@ -33,6 +33,8 @@ import java.util.ArrayList;
 public class Profile extends AppCompatActivity implements View.OnClickListener{
 
     Button btnLgout;
+    Button btnProfile;
+    Button btnPost;
 
     TextView acnt;
     TextView inbx;
@@ -50,8 +52,12 @@ public class Profile extends AppCompatActivity implements View.OnClickListener{
         pst = (TextView) findViewById(R.id.txtViewPsts);
 
         btnLgout = (Button) findViewById(R.id.btnlgout);
+        btnProfile = (Button) findViewById(R.id.btnViewPostsProfile);
+        btnPost = (Button) findViewById(R.id.btnNewPostProfile);
 
         btnLgout.setOnClickListener(this);
+        btnProfile.setOnClickListener(this);
+        btnPost.setOnClickListener(this);
         acnt.setOnClickListener(this);
 
     }
@@ -73,6 +79,12 @@ public class Profile extends AppCompatActivity implements View.OnClickListener{
                 break;
             case R.id.txtViewPsts:
                 viewPosts();
+                break;
+            case R.id.btnViewPostsProfile:
+                startActivity(new Intent(this, DisplayPosts.class));
+                break;
+            case R.id.btnNewPostProfile:
+                startActivity(new Intent(this, Home.class));
                 break;
         }
     }

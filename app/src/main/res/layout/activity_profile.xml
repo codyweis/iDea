@@ -61,29 +61,34 @@
         android:paddingBottom="15dp"
         android:clickable="true" />
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/test"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:textColor="#1851a6"
-        android:textSize="20dp" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/test2"
-        android:textColor="#185a6e"
-        android:textSize="20dp"
-        android:layout_marginBottom="50dp" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Post"
+            android:id="@+id/btnNewPostProfile"
+            android:textColor="#248baa"
+            android:layout_gravity="center_horizontal" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:id="@+id/btnlgout"
-        android:layout_gravity="center_horizontal"
-        android:textColor="#248baa" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Posts"
+            android:id="@+id/btnViewPostsProfile"
+            android:textColor="#248baa" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:id="@+id/btnlgout"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#248baa" />
+
+    </LinearLayout>
 
 </LinearLayout>

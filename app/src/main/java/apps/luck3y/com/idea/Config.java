@@ -28,6 +28,10 @@ public class Config {
     public static final String topic_id = "topic_id";
     public static final String topic_title = "title";
 
+    //variables for getposts
+    public static final String post_content = "content";
+    public static final String post_user = "user";
+
     //variables for getuserdata
     public static final String getUsername = "username";
     public static final String getfname = "fname";
@@ -37,6 +41,7 @@ public class Config {
     //json array
     public static final String json_array = "result";
     public static final String json_array_user = "resultUser";
+    public static final String json_array_post = "resultPost";
 
    //Check server response is equal to this string from php file
     public static final String logInMessage = "connected";

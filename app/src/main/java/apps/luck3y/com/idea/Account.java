@@ -41,7 +41,7 @@ import java.util.Map;
  */
 public class Account extends AppCompatActivity implements View.OnClickListener {
 
-    Button btnLgout;
+    Button btnBack;
 
     TextView getFname;
     TextView getLname;
@@ -64,47 +64,47 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
 
         userInfo = new ArrayList<String>();
 
-        btnLgout = (Button) findViewById(R.id.btnlgout);
+        btnBack = (Button) findViewById(R.id.btnBack);
 
-        btnLgout.setOnClickListener(this);
+        btnBack.setOnClickListener(this);
 
         getUserData();
 
     }
 
-    private void logUserOut(){
-        //Creating an alert dialog to confirm logout
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Are you sure you want to logout?");
-        alertDialogBuilder.setPositiveButton("Ya!",
-                //if yes
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-
-                        //removing from shared pref
-                        SharedPreferences preferences = getSharedPreferences(Config.sharedPref, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        //change to false
-                        editor.putBoolean(Config.sharedPrefBool, false);
-                        //set username to empty string
-                        editor.putString(Config.username, "");
-                        editor.commit();
-                        Intent intent = new Intent(Account.this, MainActivity.class);
-                        startActivity(intent);
-                    }
-                });
-        //no, option do nothing
-        alertDialogBuilder.setNegativeButton("Nah",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface arg0, int arg1) {
-
-                    }
-                });
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
+//    private void logUserOut(){
+//        //Creating an alert dialog to confirm logout
+//        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+//        alertDialogBuilder.setMessage("Are you sure you want to logout?");
+//        alertDialogBuilder.setPositiveButton("Ya!",
+//                //if yes
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface arg0, int arg1) {
+//
+//                        //removing from shared pref
+//                        SharedPreferences preferences = getSharedPreferences(Config.sharedPref, Context.MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = preferences.edit();
+//                        //change to false
+//                        editor.putBoolean(Config.sharedPrefBool, false);
+//                        //set username to empty string
+//                        editor.putString(Config.username, "");
+//                        editor.commit();
+//                        Intent intent = new Intent(Account.this, MainActivity.class);
+//                        startActivity(intent);
+//                    }
+//                });
+//        //no, option do nothing
+//        alertDialogBuilder.setNegativeButton("Nah",
+//                new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface arg0, int arg1) {
+//
+//                    }
+//                });
+//        AlertDialog alertDialog = alertDialogBuilder.create();
+//        alertDialog.show();
+//    }
 
 
     private void getUserData() {
@@ -163,15 +163,13 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
 
         for(int i = 0; i < userInfo.size(); i++){
             switch(i){
-                case 0: getUsername.setText(userInfo.get(i));
-                    System.out.println("here2 "+i);
+                case 0: getUsername.setText("Username: " + userInfo.get(i));
                     break;
-                case 1: getFname.setText(userInfo.get(i));
-                    System.out.println("here2 " + i);
+                case 1: getFname.setText("First: " + userInfo.get(i));
                     break;
-                case 2: getLname.setText(userInfo.get(i));
+                case 2: getLname.setText("Last: " + userInfo.get(i));
                     break;
-                case 3: getEmail.setText(userInfo.get(i));
+                case 3: getEmail.setText("Email: " + userInfo.get(i));
                     break;
             }
         }
@@ -181,8 +179,8 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
 
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.btnlgout:
-                logUserOut();
+            case R.id.btnBack:
+                startActivity(new Intent(this, Profile.class));
                 break;
         }
     }
