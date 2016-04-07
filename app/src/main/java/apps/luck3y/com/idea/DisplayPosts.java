@@ -81,8 +81,12 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
 
             TextView content = (TextView) view.findViewById(R.id.content);
             TextView user = (TextView) view.findViewById(R.id.user);
+            TextView topic = (TextView) view.findViewById(R.id.topic);
+            TextView date = (TextView) view.findViewById(R.id.date);
             content.setText(posts.getContent());
             user.setText(posts.getUser());
+            topic.setText(posts.getTopic());
+            date.setText(posts.getDate());
 
             return view;
         }
@@ -127,25 +131,23 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
                 JSONObject json = jsonArray.getJSONObject(i);
 
                 //add content and user to arraylist
-                allPosts.add(json.getString(Config.post_content));
+
+                allPosts.add(json.getString(Config.post_date));
+                allPosts.add(json.getString(Config.post_topic));
                 allPosts.add(json.getString(Config.post_user));
-                System.out.println(allPosts);
+                allPosts.add(json.getString(Config.post_content));
+
             } catch (JSONException e) {
 
             }
         }
         ArrayList<Posts> post = new ArrayList<Posts>();
-        System.out.println("FINAL: "+allPosts.size());
-        for(int i = allPosts.size() - 1; i >= 0; i -= 2){
-            post.add(new Posts(allPosts.get(i), allPosts.get(i-1)));
+        for(int i = allPosts.size() - 1; i >= 0; i -= 4){
+            post.add(new Posts(allPosts.get(i), allPosts.get(i-1), allPosts.get(i-2), allPosts.get(i-3)));
         }
-        System.out.println(post);
+        System.out.println("here: "+ allPosts);
 
         setListAdapter(new PostsAdapter(this, R.layout.activity_posts, post));
-//        gridView = (GridView) findViewById(R.id.gridView);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_list_item_1, contentPosts);
-//        gridView.setAdapter(adapter);
     }
 
     private void logUserOut(){

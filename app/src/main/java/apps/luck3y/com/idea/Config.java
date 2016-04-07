@@ -31,6 +31,8 @@ public class Config {
     //variables for getposts
     public static final String post_content = "content";
     public static final String post_user = "user";
+    public static final String post_topic = "topic_title";
+    public static final String post_date = "post_date";
 
     //variables for getuserdata
     public static final String getUsername = "username";
