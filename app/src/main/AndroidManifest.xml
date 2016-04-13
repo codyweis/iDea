@@ -37,6 +37,9 @@
         <activity
             android:name=".DisplayPosts">
         </activity>
+        <activity
+            android:name=".IndPosts">
+        </activity>
     </application>
 
 </manifest>

@@ -25,6 +25,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    public void onBackPressed() {
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
     }

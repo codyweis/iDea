@@ -47,6 +47,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     }
 
     @Override
+    public void onBackPressed() {
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         //get from shared pref

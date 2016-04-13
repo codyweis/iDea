@@ -214,6 +214,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
                         //set username to empty string
                         editor.putString(Config.username, "");
                         editor.commit();
+                        System.out.println("HERE"+editor);
                         Intent intent = new Intent(Home.this, MainActivity.class);
                         startActivity(intent);
                     }

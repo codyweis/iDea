@@ -44,6 +44,7 @@ public class Config {
     public static final String json_array = "result";
     public static final String json_array_user = "resultUser";
     public static final String json_array_post = "resultPost";
+    public static final String json_array_ind_post = "resultIndPost";
 
    //Check server response is equal to this string from php file
     public static final String logInMessage = "connected";

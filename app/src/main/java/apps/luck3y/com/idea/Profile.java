@@ -59,6 +59,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener{
         btnProfile.setOnClickListener(this);
         btnPost.setOnClickListener(this);
         acnt.setOnClickListener(this);
+        pst.setOnClickListener(this);
 
     }
 
@@ -78,7 +79,7 @@ public class Profile extends AppCompatActivity implements View.OnClickListener{
                 viewSent();
                 break;
             case R.id.txtViewPsts:
-                viewPosts();
+                startActivity(new Intent(this, IndPosts.class));
                 break;
             case R.id.btnViewPostsProfile:
                 startActivity(new Intent(this, DisplayPosts.class));
@@ -95,10 +96,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener{
 
     private void viewSent() {
         // TODO: 2/18/2016
-    }
-
-    private void viewPosts() {
-        // TODO: 2/18/2016  
     }
 
     private void logUserOut(){
