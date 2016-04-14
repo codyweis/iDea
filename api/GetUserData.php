@@ -1,5 +1,6 @@
 <?php
 
+
 session_start();
 $sessionid = $_GET['PHPSESSID'];
 	if($_SERVER['REQUEST_METHOD'] == 'GET'){
