@@ -40,7 +40,7 @@ public class IndPosts extends ListActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity__indposts);
+        setContentView(R.layout.activity_indposts);
 
         profile = (Button) findViewById(R.id.profilePostsInd);
         logout = (Button) findViewById(R.id.logoutPostsInd);
@@ -71,10 +71,16 @@ public class IndPosts extends ListActivity implements View.OnClickListener {
             TextView user = (TextView) view.findViewById(R.id.user);
             TextView topic = (TextView) view.findViewById(R.id.topic);
             TextView date = (TextView) view.findViewById(R.id.date);
+            TextView likes = (TextView) view.findViewById(R.id.likeCount);
+            TextView id = (TextView) view.findViewById(R.id.hiddenID);
+            Button like = (Button) view.findViewById(R.id.btnLike);
+
             content.setText(posts.getContent());
             user.setText(posts.getUser());
             topic.setText(posts.getTopic());
             date.setText(posts.getDate());
+            likes.setText(posts.getLikes());
+            id.setText(posts.getId());
 
             return view;
         }
@@ -124,18 +130,20 @@ public class IndPosts extends ListActivity implements View.OnClickListener {
 
                 //add content and user to arraylist
 
+                allPosts.add(json.getString(Config.like_count));
                 allPosts.add(json.getString(Config.post_date));
                 allPosts.add(json.getString(Config.post_topic));
                 allPosts.add(json.getString(Config.post_user));
                 allPosts.add(json.getString(Config.post_content));
+                allPosts.add(json.getString(Config.post_id));
 
             } catch (JSONException e) {
 
             }
         }
         ArrayList<Posts> post = new ArrayList<Posts>();
-        for(int i = allPosts.size() - 1; i >= 0; i -= 4){
-            post.add(new Posts(allPosts.get(i), allPosts.get(i-1), allPosts.get(i-2), allPosts.get(i-3)));
+        for(int i = allPosts.size() - 1; i >= 0; i -= 6){
+            post.add(new Posts(allPosts.get(i), allPosts.get(i-1), allPosts.get(i-2), allPosts.get(i-3), allPosts.get(i-4), allPosts.get(i-5)));
         }
         System.out.println("here: " + allPosts);
 
@@ -182,7 +190,7 @@ public class IndPosts extends ListActivity implements View.OnClickListener {
             case R.id.profilePostsInd:
                 startActivity(new Intent(IndPosts.this, Profile.class));
                 break;
-            case R.id.logoutPosts:
+            case R.id.logoutPostsInd:
                 logUserOut();
                 break;
         }

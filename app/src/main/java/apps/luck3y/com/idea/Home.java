@@ -46,6 +46,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
     Spinner spinner;
     ArrayList<String> topics;
     JSONArray result;
+    ArrayList<String> postData = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,7 +148,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
         //// TODO: 2/17/2016
     }
 
-    ////TODO: 2/26/2016
     private void insertPost(){
         final String postText = ideaPost.getText().toString().trim();
 
@@ -196,6 +196,104 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
         requestQueue.add(stringRequest);
     }
 
+    private void getSmallData(){
+
+        //create string request
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, Config.SERVER_ADDRESS + "GetPostData.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        JSONObject jsonObject = null;
+                        try {
+
+                            //json string to jsonobject
+                            jsonObject = new JSONObject(response);
+
+
+                            //get json sstring created in php and store to JSON Array
+                            result = jsonObject.getJSONArray(Config.json_array_data);
+
+                            //get id and user from json array
+                            getArrayData(result);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void getArrayData(JSONArray jsonArray){
+        for(int i = 0; i < 1; i++) {
+            try {
+                JSONObject json = jsonArray.getJSONObject(i);
+
+                System.out.println("HERE"+postData);
+                postData.add(json.getString(Config.user_data_post));
+                postData.add(json.getString(Config.id_data));
+
+            } catch (JSONException e) {
+
+            }
+        }
+        SharedPreferences sharedPreferences = Home.this.getSharedPreferences(Config.sharedPref, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //add values
+        editor.putString(Config.storePostId, postData.get(1));
+        editor.putString(Config.storePostUser, postData.get(0));
+        editor.commit();
+    }
+
+    private void addData(){
+
+        SharedPreferences sharedPreferences = getSharedPreferences(Config.sharedPref, Context.MODE_PRIVATE);
+        final String user = sharedPreferences.getString(Config.storePostUser, "user");
+        final String id = sharedPreferences.getString(Config.storePostId, "post_id");
+
+        //create string request
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "AddPostData.php",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(Home.this, error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }){
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                //from android.com: A Map is a data structure consisting of a set of keys and
+                // values in which each key is mapped to a single value. The class of the objects
+                // used as keys is declared when the Map is declared, as is the class of the
+                // corresponding values.
+                Map<String,String> hashMap = new HashMap<>();
+
+                //maps specified string key, to specified string value
+                hashMap.put(Config.user, user);
+                hashMap.put(Config.hid, id);
+
+                return hashMap;
+            }
+        };
+
+        //add string request to queue
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
     private void logUserOut(){
         //Creating an alert dialog to confirm logout
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -214,7 +312,6 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
                         //set username to empty string
                         editor.putString(Config.username, "");
                         editor.commit();
-                        System.out.println("HERE"+editor);
                         Intent intent = new Intent(Home.this, MainActivity.class);
                         startActivity(intent);
                     }
@@ -258,6 +355,9 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
                 break;
             case R.id.btnSbmtPst:
                 insertPost();
+                getSmallData();
+                addData();
+
         }
     }
 

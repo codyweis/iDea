@@ -5,16 +5,20 @@ package apps.luck3y.com.idea;
  */
 public class Posts {
 
+    public String id;
     public String content;
     public String user;
     public String date;
     public String topic;
+    public String likes;
 
-    public Posts(String content, String user, String topic, String date){
+    public Posts(String id, String content, String user, String topic, String date, String likes){
+        this.id = id;
         this.content = content;
         this.user = user;
         this.topic = topic;
         this.date = date;
+        this.likes = likes;
     }
 
     public String getContent(){
@@ -29,6 +33,12 @@ public class Posts {
     public String getTopic(){
         return topic;
     }
+    public String getLikes(){
+        return likes;
+    }
+    public String getId(){
+        return id;
+    }
 
     public void setContent(String content){
         this.content = content;
@@ -41,5 +51,11 @@ public class Posts {
     }
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+    public void setLikes(String likes) {
+        this.likes = likes;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 }

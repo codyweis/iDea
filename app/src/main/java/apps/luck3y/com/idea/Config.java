@@ -8,6 +8,10 @@ public class Config {
     //session id
     public static final String SID = "SessionID";
 
+    //store post id user
+    public static final String storePostUser = "user";
+    public static final String storePostId = "post_id";
+
     //database
     public static final String SERVER_ADDRESS = "http://ideaapp.esy.es/";
 
@@ -28,11 +32,21 @@ public class Config {
     public static final String topic_id = "topic_id";
     public static final String topic_title = "title";
 
+    //variables for postdata id and user
+    public static final String user_data_post = "user";
+    public static final String id_data = "id";
+
     //variables for getposts
     public static final String post_content = "content";
     public static final String post_user = "user";
     public static final String post_topic = "topic_title";
     public static final String post_date = "post_date";
+    public static final String like_count = "likes";
+    public static final String post_id = "id";
+
+    //like method in display posts
+    public static final String hid = "post_id";
+    public static final String user = "user";
 
     //variables for getuserdata
     public static final String getUsername = "username";
@@ -45,9 +59,11 @@ public class Config {
     public static final String json_array_user = "resultUser";
     public static final String json_array_post = "resultPost";
     public static final String json_array_ind_post = "resultIndPost";
+    public static final String json_array_data = "dataResult";
 
    //Check server response is equal to this string from php file
     public static final String logInMessage = "connected";
+    public static final String likeResponse = "success";
 
     //check server response is equal to createdPost messessage
     public static final String postCreated = "created";
