@@ -45,8 +45,11 @@ public class Config {
     public static final String post_id = "id";
 
     //like method in display posts
-    public static final String hid = "post_id";
+    public static final String hid = "id";
     public static final String user = "user";
+
+    //like stuff
+    public static final String getLike = "likes";
 
     //variables for getuserdata
     public static final String getUsername = "username";
@@ -60,6 +63,8 @@ public class Config {
     public static final String json_array_post = "resultPost";
     public static final String json_array_ind_post = "resultIndPost";
     public static final String json_array_data = "dataResult";
+    public static final String json_array_likes = "newLikesCount";
+
 
    //Check server response is equal to this string from php file
     public static final String logInMessage = "connected";

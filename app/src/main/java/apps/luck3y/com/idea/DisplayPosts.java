@@ -47,7 +47,9 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
     //ArrayList<String> userPosts = new ArrayList<String>();
     ArrayList<String> allPosts = new ArrayList<String>();
     JSONArray result;
+    JSONArray result2;
     Button profile, logout, post;
+    ArrayList<String> likeCount = new ArrayList<String>();
 
 
     @Override
@@ -66,8 +68,7 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
         getPosts();
     }
 
-    class PostsAdapter extends ArrayAdapter<Posts>{
-
+    class PostsAdapter extends ArrayAdapter<Posts> implements View.OnClickListener {
         //used to create views from xml
         private LayoutInflater layoutInflater;
 
@@ -75,34 +76,74 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
             super(context, textViewResourceId, posts);
             layoutInflater = LayoutInflater.from(context);
         }
-
         //add to xml from dataset
         @Override
+        // view convertview = recycled view
         public View getView(int position, View convertView, ViewGroup parent) {
-            View view = layoutInflater.inflate(R.layout.activity_posts, null);
+            View view = convertView;
+            Holder holder = null;
             Posts posts = getItem(position);
 
-            TextView content = (TextView) view.findViewById(R.id.content);
-            TextView user = (TextView) view.findViewById(R.id.user);
-            TextView topic = (TextView) view.findViewById(R.id.topic);
-            TextView date = (TextView) view.findViewById(R.id.date);
-            TextView likes = (TextView) view.findViewById(R.id.likeCount);
-            TextView id = (TextView) view.findViewById(R.id.hiddenID);
-            Button like = (Button) view.findViewById(R.id.btnLike);
+            //checks if recycled view is null, thewn creates new view, if not null, use same view
+            if(view == null){
+                view = layoutInflater.inflate(R.layout.activity_posts, null);
 
-            content.setText(posts.getContent());
-            user.setText(posts.getUser());
-            topic.setText(posts.getTopic());
-            date.setText(posts.getDate());
-            likes.setText(posts.getLikes());
-            id.setText(posts.getId());
+                Button like = (Button) view.findViewById(R.id.btnLike);
+                TextView content = (TextView) view.findViewById(R.id.content);
+                TextView user = (TextView) view.findViewById(R.id.user);
+                TextView topic = (TextView) view.findViewById(R.id.topic);
+                TextView date = (TextView) view.findViewById(R.id.date);
+                TextView likes = (TextView) view.findViewById(R.id.likeCount);
+                TextView hiddenId = (TextView) view.findViewById(R.id.hiddenID);
 
-            like.setOnClickListener(DisplayPosts.this);
+                holder = new Holder(content, user, topic, date, likes, hiddenId, like);
+
+                view.setTag(holder);
+                like.setTag(holder);
+            }
+            else{
+                holder = (Holder) view.getTag();
+            }
+            holder.content.setText(posts.getContent());
+            holder.user.setText(posts.getUser());
+            holder.topic.setText(posts.getTopic());
+            holder.date.setText(posts.getDate());
+            holder.likes.setText(posts.getLikes());
+            holder.hiddenId.setText(posts.getId());
+
+            holder.like.setOnClickListener(this);
 
             return view;
         }
 
+        @Override
+        public void onClick(View v) {
+            Button like = (Button) v;
+            Holder holder = (Holder) v.getTag();
+            Toast.makeText(DisplayPosts.this, "Button: " + like.getText(), Toast.LENGTH_LONG).show();
 
+            createLike(like, holder.hiddenId, holder.likes);
+        }
+    }
+
+    static class Holder{
+        public TextView content;
+        public TextView user;
+        public TextView topic;
+        public TextView date;
+        public TextView likes;
+        public TextView hiddenId;
+        public Button like;
+
+        public Holder(TextView content, TextView user, TextView topic, TextView date, TextView likes, TextView hiddenId, Button like) {
+            this.content = content;
+            this.user = user;
+            this.topic = topic;
+            this.date = date;
+            this.likes = likes;
+            this.hiddenId = hiddenId;
+            this.like = like;
+        }
     }
 
     private void getPosts(){
@@ -164,13 +205,10 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
         setListAdapter(new PostsAdapter(this, R.layout.activity_posts, post));
     }
 
-    private void createLike(){
-        Button like = (Button) findViewById(R.id.btnLike);
-        TextView id = (TextView) findViewById(R.id.hiddenID);
-        TextView user = (TextView) findViewById(R.id.user);
+    private void createLike(final Button like, final TextView hiddenid, final TextView likes){
 
-        final String hid = id.getText().toString().trim();
-        final String puser = user.getText().toString().trim();
+        final String hid = hiddenid.getText().toString().trim();
+//        final String oldlikes = likes.getText().toString();
 
         if(like.getText().toString().equalsIgnoreCase("like")){
             like.setText("UnLike");
@@ -179,12 +217,22 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            if(response.trim().equalsIgnoreCase(Config.likeResponse)) {
 
-                            }
-                            else{
-                                //display error message
-                                Toast.makeText(DisplayPosts.this, "error", Toast.LENGTH_LONG).show();
+                            JSONObject jsonObject = null;
+                            try {
+
+                                //json string to jsonobject
+                                jsonObject = new JSONObject(response);
+
+
+                                //get json sstring created in php and store to JSON Array
+                                result2 = jsonObject.getJSONArray(Config.json_array_likes);
+
+                                //get username from json array
+                                likes.setText(getLikeCount(result2));
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
                         }
                     },
@@ -202,8 +250,7 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
                     // corresponding values.
                     Map<String,String> hashMap = new HashMap<>();
 
-                    //maps specified string key, username and password, to specified string value
-                    hashMap.put(Config.user, puser);
+                    //maps specified string key, to specified string value
                     hashMap.put(Config.hid, hid);
 
                     return hashMap;
@@ -217,6 +264,22 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
         else{
             like.setText("Like");
         }
+    }
+
+    private String getLikeCount(JSONArray jsonArray){
+        String lc = null;
+        for(int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject json = jsonArray.getJSONObject(i);
+
+                likeCount.add(json.getString(Config.getLike));
+                lc = likeCount.get(0);
+
+            } catch (JSONException e) {
+
+            }
+        }
+        return lc;
     }
 
     private void logUserOut(){
@@ -258,15 +321,13 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
         switch(v.getId()){
             case R.id.profilePosts:
                 startActivity(new Intent(this, Profile.class));
-            break;
+                break;
             case R.id.logoutPosts:
                 logUserOut();
                 break;
             case R.id.newPost:
                 startActivity(new Intent(this, Home.class));
                 break;
-            case R.id.btnLike:
-                createLike();
         }
     }
 }
