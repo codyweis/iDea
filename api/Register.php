@@ -1,4 +1,3 @@
-
 <?php
 
 	if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -30,7 +29,7 @@
 
 		$sql = "INSERT INTO USER (fname, lname, username, password, email) VALUES ('$fname', '$lname', '$username', '$password', '$email')";
 		if(mysqli_query($conn, $sql)){
-			echo "successful";
+echo "successful";
 		}else{
 			echo "Could not register";
 		}
@@ -38,4 +37,4 @@
 		echo 'error';
 	}	
 		mysqli_close($conn);
-?>
+?> 

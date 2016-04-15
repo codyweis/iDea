@@ -1,9 +1,8 @@
 <?php
 session_start();
-	if($_SERVER['REQUEST_METHOD'] == 'POST'){
-
-		$sessionid = session_id();
-	
+session_regenerate_id();
+$sessionid = session_id();
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
 		require_once('connect.inc.php');
 		 
 		$sql = "SELECT username, password FROM USER WHERE username = ?";
@@ -12,6 +11,8 @@ session_start();
 
 		$username = $_POST["username"];
 		$password = $_POST["password"];
+
+                $sqlSess = "INSERT INTO SESSION(session_id, user) VALUES('$sessionid', '$username')";
 
 		$stmt->bind_param("s", $username);
 
@@ -24,12 +25,14 @@ session_start();
 		}
 
 		if($verify){
-			$_SESSION["username"] = $username;
-			echo 'connected';
-			echo $sessionid;
+                        if(mysqli_query($conn, $sqlSess)){
+			        echo 'connected';
+echo $sessionid;
+                        }
 		}else{
 			echo 'check details';
 		}
+
 
 		mysqli_close($conn);
 	}
