@@ -1,9 +1,11 @@
 package apps.luck3y.com.idea;
 
+import java.util.HashMap;
+
 /**
  * Created by Cody Weisenberger on 4/6/2016.
  */
-public class Posts {
+public class Posts extends HashMap<String, String> {
 
     public String id;
     public String content;
@@ -21,6 +23,11 @@ public class Posts {
         this.likes = likes;
     }
 
+    public Posts(String id, String likes){
+        this.id = id;
+        this.likes = likes;
+    }
+
     public String getContent(){
         return content;
     }
@@ -34,6 +41,9 @@ public class Posts {
         return topic;
     }
     public String getLikes(){
+        return likes;
+    }
+    public String getLikes(String likes){
         return likes;
     }
     public String getId(){

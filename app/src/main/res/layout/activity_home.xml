@@ -80,4 +80,14 @@
         android:layout_marginTop="20dp"
         android:textColor="#248baa" />
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/btnAcpt"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/progBarHome"
+        android:layout_gravity="center_horizontal" />
+
 </LinearLayout>

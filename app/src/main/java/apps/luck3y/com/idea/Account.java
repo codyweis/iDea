@@ -65,9 +65,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener {
         userInfo = new ArrayList<String>();
 
         btnBack = (Button) findViewById(R.id.btnBack);
-
         btnBack.setOnClickListener(this);
-
         getUserData();
 
     }

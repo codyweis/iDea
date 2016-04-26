@@ -65,7 +65,6 @@ public class Config {
     public static final String json_array_data = "dataResult";
     public static final String json_array_likes = "newLikesCount";
 
-
    //Check server response is equal to this string from php file
     public static final String logInMessage = "connected";
     public static final String likeResponse = "success";

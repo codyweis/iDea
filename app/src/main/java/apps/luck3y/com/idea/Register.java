@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -29,6 +30,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
     Button btnRegstr;
     EditText txtRegUsrnm, txtRegFrst, txtRegLst, txtRegPswrd, txtRegPswrdCnfrm, txtRegEmail;
+    ProgressBar load;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,65 +41,79 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         txtRegFrst = (EditText) findViewById(R.id.txtRegFrst);
         txtRegLst = (EditText) findViewById(R.id.txtRegLst);
         txtRegPswrd = (EditText) findViewById(R.id.txtRegPswrd);
-        txtRegPswrdCnfrm = (EditText) findViewById(R.id.txtRegPswrdCnfrm);
         txtRegUsrnm = (EditText) findViewById(R.id.txtRegUsrnm);
         btnRegstr = (Button) findViewById(R.id.btnRegstr);
+        load = (ProgressBar) findViewById(R.id.progressBarReg);
 
         btnRegstr.setOnClickListener(this);
+        load.setVisibility(View.GONE);
     }
 
-    private void register(){
-        final String fname =txtRegFrst.getText().toString().trim();
-        final String lname = txtRegLst.getText().toString().trim();
-        final String username = txtRegUsrnm.getText().toString().trim();
-        final String password = txtRegPswrd.getText().toString().trim();
-        final String email = txtRegEmail.getText().toString().trim();
+    private void register() {
+        final String fname;
+        final String lname;
+        final String username;
+        final String password;
+        final String email;
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "Register.php",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if(response.trim().equalsIgnoreCase(Config.registered)) {
-                            Toast.makeText(Register.this, "successful", Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(Register.this, Login.class);
-                            startActivity(intent);
+        if (txtRegFrst.getText().toString().trim().isEmpty() || txtRegLst.getText().toString().trim().isEmpty() || txtRegUsrnm.getText().toString().trim().isEmpty() || txtRegPswrd.getText().toString().trim().isEmpty() || txtRegEmail.getText().toString().trim().isEmpty()) {
+            Toast.makeText(Register.this, "Fill out all fields", Toast.LENGTH_SHORT).show();
+        } else {
+            fname = txtRegFrst.getText().toString().trim();
+            lname = txtRegLst.getText().toString().trim();
+            username = txtRegUsrnm.getText().toString().trim();
+            password = txtRegPswrd.getText().toString().trim();
+            email = txtRegEmail.getText().toString().trim();
+
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "Register.php",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            if (response.trim().equalsIgnoreCase(Config.registered)) {
+                                Toast.makeText(Register.this, "successful", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(Register.this, Login.class);
+                                startActivity(intent);
+                            } else if (response.trim().equalsIgnoreCase(Config.usererror)) {
+                                Toast.makeText(Register.this, "Username already registered", Toast.LENGTH_LONG).show();
+                                load.setVisibility(View.GONE);
+
+                            } else if (response.trim().equalsIgnoreCase(Config.emailerror)) {
+                                Toast.makeText(Register.this, "Email already registered", Toast.LENGTH_LONG).show();
+                                load.setVisibility(View.GONE);
+                            } else {
+                                Toast.makeText(Register.this, "error registering, contact developer", Toast.LENGTH_LONG).show();
+                                load.setVisibility(View.GONE);
+                            }
                         }
-                        else if(response.trim().equalsIgnoreCase(Config.usererror)){
-                            Toast.makeText(Register.this, "Username already registered", Toast.LENGTH_LONG).show();
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(Register.this, error.toString(), Toast.LENGTH_LONG).show();
                         }
-                        else if(response.trim().equalsIgnoreCase(Config.emailerror)){
-                            Toast.makeText(Register.this, "Email already registered", Toast.LENGTH_LONG).show();
-                        }
-                        else{
-                            Toast.makeText(Register.this, "error registering, contact developer", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Register.this, error.toString(), Toast.LENGTH_LONG).show();
-                    }
-                }){
-            @Override
-            protected Map<String,String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put(Config.fname, fname);
-                params.put(Config.lname, lname);
-                params.put(Config.username, username);
-                params.put(Config.password, password);
-                params.put(Config.email, email);
-                return params;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+                    }) {
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put(Config.fname, fname);
+                    params.put(Config.lname, lname);
+                    params.put(Config.username, username);
+                    params.put(Config.password, password);
+                    params.put(Config.email, email);
+                    return params;
+                }
+            };
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(stringRequest);
+        }
+        load.setVisibility(View.GONE);
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.btnRegstr:
+                load.setVisibility(View.VISIBLE);
                 register();
         }
     }

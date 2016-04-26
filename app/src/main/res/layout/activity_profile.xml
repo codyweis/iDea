@@ -22,35 +22,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Inbox"
-        android:id="@+id/txtViewInbx"
-        android:layout_gravity="center_horizontal|left"
-        android:paddingLeft="20dp"
-        android:textSize="20dp"
-        android:paddingTop="15dp"
-        android:textColor="#185a6e"
-        android:background="#cfe5eb"
-        android:paddingBottom="15dp"
-        android:clickable="true" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Sent"
-        android:id="@+id/txtViewSnt"
-        android:layout_gravity="center_horizontal|left"
-        android:paddingLeft="20dp"
-        android:textSize="20dp"
-        android:paddingTop="15dp"
-        android:textColor="#185a6e"
-        android:background="#cfe5eb"
-        android:paddingBottom="15dp"
-        android:clickable="true" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Posts"
+        android:text="My Posts"
         android:id="@+id/txtViewPsts"
         android:layout_gravity="center_horizontal|left"
         android:paddingLeft="20dp"
@@ -59,7 +31,8 @@
         android:textColor="#185a6e"
         android:background="#cfe5eb"
         android:paddingBottom="15dp"
-        android:clickable="true" />
+        android:clickable="true"
+        android:layout_marginBottom="50dp" />
 
     <LinearLayout
         android:orientation="horizontal"

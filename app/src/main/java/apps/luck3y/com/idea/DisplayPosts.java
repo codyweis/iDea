@@ -1,5 +1,6 @@
 package apps.luck3y.com.idea;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -50,7 +51,7 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
     JSONArray result2;
     Button profile, logout, post;
     ArrayList<String> likeCount = new ArrayList<String>();
-
+    int n = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,25 +69,28 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
         getPosts();
     }
 
-    class PostsAdapter extends ArrayAdapter<Posts> implements View.OnClickListener {
+    public class PostsAdapter extends ArrayAdapter<Posts>  {
         //used to create views from xml
-        private LayoutInflater layoutInflater;
+        Context context;
+        int textViewResourceId;
+        ArrayList<Posts> mPosts = new ArrayList<Posts>();
 
-        public PostsAdapter(Context context, int textViewResourceId, List<Posts> posts) {
+        public PostsAdapter(Context context, int textViewResourceId, ArrayList<Posts> posts) {
             super(context, textViewResourceId, posts);
-            layoutInflater = LayoutInflater.from(context);
+            this.textViewResourceId = textViewResourceId;
+            this.context = context;
+            this.mPosts = posts;
         }
-        //add to xml from dataset
-        @Override
-        // view convertview = recycled view
-        public View getView(int position, View convertView, ViewGroup parent) {
-            View view = convertView;
-            Holder holder = null;
-            Posts posts = getItem(position);
 
+        // view convertview = recycled view
+        @Override
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View view = convertView;
+            final Holder holder;
             //checks if recycled view is null, thewn creates new view, if not null, use same view
             if(view == null){
-                view = layoutInflater.inflate(R.layout.activity_posts, null);
+                LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+                view = inflater.inflate(textViewResourceId, parent, false);
 
                 Button like = (Button) view.findViewById(R.id.btnLike);
                 TextView content = (TextView) view.findViewById(R.id.content);
@@ -95,15 +99,29 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
                 TextView date = (TextView) view.findViewById(R.id.date);
                 TextView likes = (TextView) view.findViewById(R.id.likeCount);
                 TextView hiddenId = (TextView) view.findViewById(R.id.hiddenID);
-
                 holder = new Holder(content, user, topic, date, likes, hiddenId, like);
 
+                holder.like.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        createLike(position, holder.like, holder.hiddenId, holder.likes);//Added one more parameter "position"
+                    }
+                });
+
                 view.setTag(holder);
-                like.setTag(holder);
             }
             else{
                 holder = (Holder) view.getTag();
             }
+//            try{
+//                HashMap<String, String> map = mPosts.get(position);
+//                holder.like.setText(map.get("name"));
+//
+//            }catch (Exception e){
+//
+//            }
+
+            Posts posts = mPosts.get(position);
             holder.content.setText(posts.getContent());
             holder.user.setText(posts.getUser());
             holder.topic.setText(posts.getTopic());
@@ -111,38 +129,102 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
             holder.likes.setText(posts.getLikes());
             holder.hiddenId.setText(posts.getId());
 
-            holder.like.setOnClickListener(this);
-
             return view;
         }
 
-        @Override
-        public void onClick(View v) {
-            Button like = (Button) v;
-            Holder holder = (Holder) v.getTag();
-            Toast.makeText(DisplayPosts.this, "Button: " + like.getText(), Toast.LENGTH_LONG).show();
+        private void createLike(final int position, final Button like, final TextView hiddenid, final TextView likes){
+            final String hid = hiddenid.getText().toString().trim();
 
-            createLike(like, holder.hiddenId, holder.likes);
+            if(like.getText().toString().equalsIgnoreCase("like")){
+                System.out.println("POSITION: "+position);
+                System.out.println("MPOOSTSPOSITION: "+mPosts.get(position));
+                mPosts.get(position);
+                like.setText("UnLike");
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "LikePost.php",
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+
+                                JSONObject jsonObject = null;
+                                try {
+                                    //counter
+                                    n+=1;
+
+                                    //json string to jsonobject
+                                    jsonObject = new JSONObject(response);
+                                    //get json sstring created in php and store to JSON Array
+                                    result2 = jsonObject.getJSONArray(Config.json_array_likes);
+                                    //get username from json array
+                                    String likestring = getLikeCount(result2);
+                                    String likenum = mPosts.get(position).getLikes(likestring);
+                                    likes.setText(likenum);
+                                    mPosts.get(position).setLikes(likenum);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+
+                        // corresponding values.
+                        Map<String,String> hashMap = new HashMap<>();
+                        //maps specified string key, to specified string value
+                        hashMap.put(Config.hid, hid);
+                        return hashMap;
+                    }
+                };
+
+                //add string request to queue
+                RequestQueue requestQueue = Volley.newRequestQueue(DisplayPosts.this);
+                requestQueue.add(stringRequest);
+            }
+            else{
+                like.setText("Like");
+                //mPosts.get(position);
+
+            }
         }
-    }
+        private String getLikeCount(JSONArray jsonArray){
+            System.out.println("JSON: " + jsonArray);
+            String lc = null;
+            for(int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    JSONObject json = jsonArray.getJSONObject(i);
+                    likeCount.add(json.getString(Config.getLike));
+                    System.out.println("i: " + i);
+                    lc = likeCount.get(n - 1);
+                } catch (JSONException e) {
+                }
+            }
+            System.out.println("LC: " + lc);
+            return lc;
+        }
 
-    static class Holder{
-        public TextView content;
-        public TextView user;
-        public TextView topic;
-        public TextView date;
-        public TextView likes;
-        public TextView hiddenId;
-        public Button like;
+         class Holder{
+            public TextView content;
+            public TextView user;
+            public TextView topic;
+            public TextView date;
+            public TextView likes;
+            public TextView hiddenId;
+            public Button like;
 
-        public Holder(TextView content, TextView user, TextView topic, TextView date, TextView likes, TextView hiddenId, Button like) {
-            this.content = content;
-            this.user = user;
-            this.topic = topic;
-            this.date = date;
-            this.likes = likes;
-            this.hiddenId = hiddenId;
-            this.like = like;
+            public Holder(TextView content, TextView user, TextView topic, TextView date, TextView likes, TextView hiddenId, Button like) {
+                this.content = content;
+                this.user = user;
+                this.topic = topic;
+                this.date = date;
+                this.likes = likes;
+                this.hiddenId = hiddenId;
+                this.like = like;
+            }
         }
     }
 
@@ -203,83 +285,6 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
             post.add(new Posts(allPosts.get(i), allPosts.get(i - 1), allPosts.get(i - 2), allPosts.get(i - 3), allPosts.get(i - 4), allPosts.get(i - 5)));
         }
         setListAdapter(new PostsAdapter(this, R.layout.activity_posts, post));
-    }
-
-    private void createLike(final Button like, final TextView hiddenid, final TextView likes){
-
-        final String hid = hiddenid.getText().toString().trim();
-//        final String oldlikes = likes.getText().toString();
-
-        if(like.getText().toString().equalsIgnoreCase("like")){
-            like.setText("UnLike");
-
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "LikePost.php",
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-
-                            JSONObject jsonObject = null;
-                            try {
-
-                                //json string to jsonobject
-                                jsonObject = new JSONObject(response);
-
-
-                                //get json sstring created in php and store to JSON Array
-                                result2 = jsonObject.getJSONArray(Config.json_array_likes);
-
-                                //get username from json array
-                                likes.setText(getLikeCount(result2));
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                        }
-                    }){
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    //from android.com: A Map is a data structure consisting of a set of keys and
-                    // values in which each key is mapped to a single value. The class of the objects
-                    // used as keys is declared when the Map is declared, as is the class of the
-                    // corresponding values.
-                    Map<String,String> hashMap = new HashMap<>();
-
-                    //maps specified string key, to specified string value
-                    hashMap.put(Config.hid, hid);
-
-                    return hashMap;
-                }
-            };
-
-            //add string request to queue
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
-            requestQueue.add(stringRequest);
-        }
-        else{
-            like.setText("Like");
-        }
-    }
-
-    private String getLikeCount(JSONArray jsonArray){
-        String lc = null;
-        for(int i = 0; i < jsonArray.length(); i++) {
-            try {
-                JSONObject json = jsonArray.getJSONObject(i);
-
-                likeCount.add(json.getString(Config.getLike));
-                lc = likeCount.get(0);
-
-            } catch (JSONException e) {
-
-            }
-        }
-        return lc;
     }
 
     private void logUserOut(){

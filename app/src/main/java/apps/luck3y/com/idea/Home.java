@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -41,6 +42,8 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
     Button btnPrfile;
     Button btnSbmitPst;
 
+    ProgressBar load;
+
     EditText ideaPost;
 
     Spinner spinner;
@@ -58,6 +61,10 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
         btnLgout = (Button) findViewById(R.id.btnLgout);
         btnPrfile = (Button) findViewById(R.id.btnProfile);
         spinner = (Spinner) findViewById(R.id.topic_dropdown);
+
+        load = (ProgressBar) findViewById(R.id.progBarHome);
+
+        load.setVisibility(View.GONE);
 
         topics = new ArrayList<String>();
 
@@ -148,54 +155,60 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
         //// TODO: 2/17/2016
     }
 
-    private void insertPost(){
+    private void insertPost() {
         final String postText = ideaPost.getText().toString().trim();
 
-        //gets topic title from drop down and puts in string
-        final String topicTitle = spinner.getSelectedItem().toString();
+        if (!postText.isEmpty()) {
 
-        SharedPreferences sharedPreferences = getSharedPreferences(Config.sharedPref, Context.MODE_PRIVATE);
-        final String username = sharedPreferences.getString(Config.username, "username");
-        //String sessionId = sharedPreferences.getString(Config.SID, "SessionID");
+            //gets topic title from drop down and puts in string
+            final String topicTitle = spinner.getSelectedItem().toString();
 
-        //create string request
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "CreatePost.php",
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Toast.makeText(Home.this, "Posted", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(Home.this, DisplayPosts.class);
-                        startActivity(intent);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(Home.this, error.toString(), Toast.LENGTH_LONG).show();
-                    }
-                }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                //from android.com: A Map is a data structure consisting of a set of keys and
-                // values in which each key is mapped to a single value. The class of the objects
-                // used as keys is declared when the Map is declared, as is the class of the
-                // corresponding values.
-                Map<String,String> hashMap = new HashMap<>();
+            SharedPreferences sharedPreferences = getSharedPreferences(Config.sharedPref, Context.MODE_PRIVATE);
+            final String username = sharedPreferences.getString(Config.username, "username");
+            //String sessionId = sharedPreferences.getString(Config.SID, "SessionID");
 
-                //maps specified string key, username and password, to specified string value
-                hashMap.put(Config.topic, topicTitle);
-                hashMap.put(Config.username, username);
-                hashMap.put(Config.content, postText);
+            //create string request
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "CreatePost.php",
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Toast.makeText(Home.this, "Posted", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(Home.this, DisplayPosts.class);
+                            startActivity(intent);
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(Home.this, error.toString(), Toast.LENGTH_LONG).show();
+                            load.setVisibility(View.GONE);
+                        }
+                    }) {
+                @Override
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    //from android.com: A Map is a data structure consisting of a set of keys and
+                    // values in which each key is mapped to a single value. The class of the objects
+                    // used as keys is declared when the Map is declared, as is the class of the
+                    // corresponding values.
+                    Map<String, String> hashMap = new HashMap<>();
 
-                return hashMap;
-            }
-        };
+                    //maps specified string key, username and password, to specified string value
+                    hashMap.put(Config.topic, topicTitle);
+                    hashMap.put(Config.username, username);
+                    hashMap.put(Config.content, postText);
 
-        //add string request to queue
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+                    return hashMap;
+                }
+            };
+
+            //add string request to queue
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            requestQueue.add(stringRequest);
+        }
+        else{
+            Toast.makeText(Home.this, "Please enter something.", Toast.LENGTH_SHORT).show();
+        }
     }
-
     private void getSmallData(){
 
         //create string request
@@ -218,12 +231,14 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        load.setVisibility(View.GONE);
 
                     }
 
@@ -271,6 +286,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(Home.this, error.toString(), Toast.LENGTH_LONG).show();
+                        load.setVisibility(View.GONE);
                     }
                 }){
             @Override
@@ -348,16 +364,17 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.btnLgout:
+                load.setVisibility(View.VISIBLE);
                 logUserOut();
                 break;
             case R.id.btnProfile:
                 startActivity(new Intent(this, Profile.class));
                 break;
             case R.id.btnSbmtPst:
+                load.setVisibility(View.VISIBLE);
                 insertPost();
                 getSmallData();
                 addData();
-
         }
     }
 

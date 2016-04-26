@@ -51,4 +51,13 @@
         android:layout_below="@+id/txtPswrd"
         android:layout_centerHorizontal="true" />
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:layout_marginTop="55dp"
+        android:layout_below="@+id/btnAcpt"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/loadingPanel" />
+
 </RelativeLayout>

@@ -47,8 +47,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.activity_profile);
 
         acnt = (TextView) findViewById(R.id.txtViewAcnt);
-        inbx = (TextView) findViewById(R.id.txtViewInbx);
-        snt = (TextView) findViewById(R.id.txtViewSnt);
         pst = (TextView) findViewById(R.id.txtViewPsts);
 
         btnLgout = (Button) findViewById(R.id.btnlgout);
@@ -72,12 +70,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener{
             case R.id.txtViewAcnt:
                 startActivity(new Intent(this, Account.class));
                 break;
-            case R.id.txtViewInbx:
-                viewInbox();
-                break;
-            case R.id.txtViewSnt:
-                viewSent();
-                break;
             case R.id.txtViewPsts:
                 startActivity(new Intent(this, IndPosts.class));
                 break;
@@ -88,14 +80,6 @@ public class Profile extends AppCompatActivity implements View.OnClickListener{
                 startActivity(new Intent(this, Home.class));
                 break;
         }
-    }
-
-    private void viewInbox() {
-        // TODO: 2/18/2016
-    }
-
-    private void viewSent() {
-        // TODO: 2/18/2016
     }
 
     private void logUserOut(){

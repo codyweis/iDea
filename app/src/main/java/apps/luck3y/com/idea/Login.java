@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -27,10 +28,12 @@ import java.util.Map;
  */
 public class Login extends AppCompatActivity implements View.OnClickListener{
 
+    ProgressBar loadingPan;
     Button btnAcpt, btnCrtAcnt2;
     EditText txtUsrnm, txtPswrd;
     //check if user logged in initialized to false
     boolean isLoggedIn = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,15 +44,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         txtPswrd = (EditText) findViewById(R.id.txtPswrd);
         btnAcpt = (Button) findViewById(R.id.btnAcpt);
         btnCrtAcnt2 = (Button) findViewById(R.id.btnCrtAcnt2);
+        loadingPan = (ProgressBar) findViewById(R.id.loadingPanel);
 
         btnAcpt.setOnClickListener(this);
         btnCrtAcnt2.setOnClickListener(this);
+        loadingPan.setVisibility(View.GONE);
     }
-
-    @Override
-    public void onBackPressed() {
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -70,7 +70,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     private void login(){
         final String username = txtUsrnm.getText().toString().trim();
         final String password = txtPswrd.getText().toString().trim();
-
         //create string request
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "Login.php",
                 new Response.Listener<String>() {
@@ -95,6 +94,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                         }else{
                             //display error message
                             Toast.makeText(Login.this, "Wrong Username or Password", Toast.LENGTH_LONG).show();
+                            loadingPan.setVisibility(View.GONE);
                         }
                     }
                 },
@@ -129,6 +129,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.btnAcpt:
+                loadingPan.setVisibility(View.VISIBLE);
                 login();
                 break;
             case R.id.btnCrtAcnt2:
