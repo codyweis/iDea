@@ -13,19 +13,16 @@ public class Posts extends HashMap<String, String> {
     public String date;
     public String topic;
     public String likes;
+    public String btnTxt;
 
-    public Posts(String id, String content, String user, String topic, String date, String likes){
+    public Posts(String id, String content, String user, String topic, String date, String likes, String btnTxt){
         this.id = id;
         this.content = content;
         this.user = user;
         this.topic = topic;
         this.date = date;
         this.likes = likes;
-    }
-
-    public Posts(String id, String likes){
-        this.id = id;
-        this.likes = likes;
+        this.btnTxt = btnTxt;
     }
 
     public String getContent(){
@@ -49,6 +46,10 @@ public class Posts extends HashMap<String, String> {
     public String getId(){
         return id;
     }
+    public String getBtnTxt(){
+        return btnTxt;
+    }
+
 
     public void setContent(String content){
         this.content = content;
@@ -67,5 +68,8 @@ public class Posts extends HashMap<String, String> {
     }
     public void setId(String id) {
         this.id = id;
+    }
+    public void setBtnTxt(String btnTxt){
+        this.btnTxt = btnTxt;
     }
 }

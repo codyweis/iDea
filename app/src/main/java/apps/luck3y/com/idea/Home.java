@@ -41,6 +41,7 @@ public class Home extends AppCompatActivity implements View.OnClickListener, Spi
     Button btnLgout;
     Button btnPrfile;
     Button btnSbmitPst;
+    String btnTxt = "Like";
 
     ProgressBar load;
 

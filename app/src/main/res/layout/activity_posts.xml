@@ -53,23 +53,30 @@
             android:textSize="10dp" />
 
         <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Like"
-            android:id="@+id/btnLike"
-            android:layout_weight="0.12"
-            android:layout_marginRight="20dp"
-            android:textColor="#248baa"
-            android:layout_gravity="top" />
+            android:id ="@+id/btnLike"
+            android:layout_width="50dp"
+            android:layout_height="35dp"
+            android:background="@drawable/unlike"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="5dp"
+            android:onClick="myClickHandler"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/hiddenID"
+            android:visibility="invisible" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Small Text"
-            android:id="@+id/hiddenID"
-            android:visibility="invisible" />
+            android:id="@+id/hiddenBtnTxt"
+            android:visibility="invisible"
+            android:textColor="#248baa" />
+
     </LinearLayout>
 
 </LinearLayout>

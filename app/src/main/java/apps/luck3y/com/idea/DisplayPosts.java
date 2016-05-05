@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -49,8 +50,11 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
     ArrayList<String> allPosts = new ArrayList<String>();
     JSONArray result;
     JSONArray result2;
+    JSONArray result3;
     Button profile, logout, post;
     ArrayList<String> likeCount = new ArrayList<String>();
+    ArrayList<String> bt = new ArrayList<String>();
+    ArrayList<String> bt2 = new ArrayList<String>();
     int n = 0;
 
     @Override
@@ -99,14 +103,8 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
                 TextView date = (TextView) view.findViewById(R.id.date);
                 TextView likes = (TextView) view.findViewById(R.id.likeCount);
                 TextView hiddenId = (TextView) view.findViewById(R.id.hiddenID);
-                holder = new Holder(content, user, topic, date, likes, hiddenId, like);
-
-                holder.like.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        createLike(position, holder.like, holder.hiddenId, holder.likes);//Added one more parameter "position"
-                    }
-                });
+                TextView btnTxt = (TextView) view.findViewById(R.id.hiddenBtnTxt);
+                holder = new Holder(content, user, topic, date, likes, hiddenId, like, btnTxt);
 
                 view.setTag(holder);
             }
@@ -128,18 +126,33 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
             holder.date.setText(posts.getDate());
             holder.likes.setText(posts.getLikes());
             holder.hiddenId.setText(posts.getId());
+            holder.btnTxt.setText(posts.getBtnTxt());
+
+//            if(holder.like.getText().toString().equals("Unlike")){
+//                holder.like.setText("Unlike");
+//            }else{
+//                holder.like.setText("Like");
+//            }
+
+            holder.like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    System.out.println("btnTextHolder: " + holder.like.getText());
+                    createLike(position, (Button) v, holder.hiddenId, holder.likes, holder.btnTxt);
+                }
+            });
 
             return view;
         }
 
-        private void createLike(final int position, final Button like, final TextView hiddenid, final TextView likes){
+        private void createLike(final int position, final Button like, final TextView hiddenid, final TextView likes, final TextView btnTxt){
             final String hid = hiddenid.getText().toString().trim();
+            final String newBtnTxt = btnTxt.getText().toString().trim();
+            System.out.println("THIS: " + newBtnTxt);
 
-            if(like.getText().toString().equalsIgnoreCase("like")){
-                System.out.println("POSITION: "+position);
-                System.out.println("MPOOSTSPOSITION: "+mPosts.get(position));
-                mPosts.get(position);
-                like.setText("UnLike");
+            if(newBtnTxt.equals("Like")){
+                System.out.println("SHOULD BE UNLIKE RIGHT?: ");
+                like.setBackgroundDrawable(getResources().getDrawable(R.drawable.liked));
                 StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "LikePost.php",
                         new Response.Listener<String>() {
                             @Override
@@ -160,6 +173,17 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
                                     likes.setText(likenum);
                                     mPosts.get(position).setLikes(likenum);
 
+                                    result3 = jsonObject.getJSONArray(Config.json_array_new_btn_txt);
+                                    String text = getButtonText(result3);
+                                    System.out.println("SHOULD BE UNLIKE RIGHT?: "+ text);
+                                    btnTxt.setText(text);
+                                    mPosts.get(position).setBtnTxt(text);
+//                                    if(btnTxt.equals("Like")){
+//                                        String newBtnTxt = ("Unlike");
+//                                    }else{
+//                                        String newBtnTxt = ("Like");
+//                                    }
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -177,6 +201,7 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
                         Map<String,String> hashMap = new HashMap<>();
                         //maps specified string key, to specified string value
                         hashMap.put(Config.hid, hid);
+                        hashMap.put(Config.newBtnTxt, newBtnTxt);
                         return hashMap;
                     }
                 };
@@ -186,9 +211,57 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
                 requestQueue.add(stringRequest);
             }
             else{
-                like.setText("Like");
-                //mPosts.get(position);
+                like.setBackgroundDrawable(getResources().getDrawable(R.drawable.unlike));
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, Config.SERVER_ADDRESS + "DeleteLike.php",
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
 
+                                JSONObject jsonObject = null;
+                                try {
+                                    //counter
+                                    n+=1;
+
+                                    //json string to jsonobject
+                                    jsonObject = new JSONObject(response);
+                                    //get json sstring created in php and store to JSON Array
+                                    result2 = jsonObject.getJSONArray(Config.json_array_delete_likes);
+                                    //get username from json array
+                                    String likestring = getLikeCount(result2);
+                                    String likenum = mPosts.get(position).getLikes(likestring);
+                                    likes.setText(likenum);
+                                    mPosts.get(position).setLikes(likenum);
+                                    result3 = jsonObject.getJSONArray(Config.json_array_new_btn_txt_uk);
+                                    String text = getButtonTextTwo(result3);
+                                    System.out.println("SHOULD BE LIKE RIGHT?: "+ text);
+                                    btnTxt.setText(text);
+                                    mPosts.get(position).setBtnTxt(text);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        }){
+                    @Override
+                    protected Map<String, String> getParams() throws AuthFailureError {
+
+                        // corresponding values.
+                        Map<String,String> hashMap = new HashMap<>();
+                        //maps specified string key, to specified string value
+                        hashMap.put(Config.hid, hid);
+                        hashMap.put(Config.newBtnTxt, newBtnTxt);
+                        return hashMap;
+                    }
+                };
+
+                //add string request to queue
+                RequestQueue requestQueue = Volley.newRequestQueue(DisplayPosts.this);
+                requestQueue.add(stringRequest);
             }
         }
         private String getLikeCount(JSONArray jsonArray){
@@ -207,6 +280,34 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
             return lc;
         }
 
+        private String getButtonText(JSONArray jsonArray){
+            System.out.println("JSON: " + jsonArray);
+            String text = "";
+            for(int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    JSONObject json = jsonArray.getJSONObject(i);
+                    bt.add(json.getString(Config.getBT));
+                } catch (JSONException e) {
+                }
+                text = bt.get(i);
+            }
+            return text;
+        }
+
+        private String getButtonTextTwo(JSONArray jsonArray){
+            System.out.println("JSON: " + jsonArray);
+            String text = "";
+            for(int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    JSONObject json = jsonArray.getJSONObject(i);
+                    bt2.add(json.getString(Config.getBT));
+                } catch (JSONException e) {
+                }
+                text = bt2.get(i);
+            }
+            return text;
+        }
+
          class Holder{
             public TextView content;
             public TextView user;
@@ -215,8 +316,9 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
             public TextView likes;
             public TextView hiddenId;
             public Button like;
+            public TextView btnTxt;
 
-            public Holder(TextView content, TextView user, TextView topic, TextView date, TextView likes, TextView hiddenId, Button like) {
+            public Holder(TextView content, TextView user, TextView topic, TextView date, TextView likes, TextView hiddenId, Button like, TextView btnTxt) {
                 this.content = content;
                 this.user = user;
                 this.topic = topic;
@@ -224,6 +326,7 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
                 this.likes = likes;
                 this.hiddenId = hiddenId;
                 this.like = like;
+                this.btnTxt = btnTxt;
             }
         }
     }
@@ -242,7 +345,6 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
                             //get json sstring created in php and store to JSON Array
                             result = jsonObject.getJSONArray(Config.json_array_post);
 
-                            //get topics from json array
                             setPosts(result);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -269,6 +371,7 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
 
                 //add content and user to arraylist
 
+                allPosts.add(json.getString(Config.button_text));
                 allPosts.add(json.getString(Config.like_count));
                 allPosts.add(json.getString(Config.post_date));
                 allPosts.add(json.getString(Config.post_topic));
@@ -281,8 +384,8 @@ public class DisplayPosts extends ListActivity implements View.OnClickListener{
             }
         }
         ArrayList<Posts> post = new ArrayList<Posts>();
-        for(int i = allPosts.size() - 1; i >= 0; i -= 6){
-            post.add(new Posts(allPosts.get(i), allPosts.get(i - 1), allPosts.get(i - 2), allPosts.get(i - 3), allPosts.get(i - 4), allPosts.get(i - 5)));
+        for(int i = allPosts.size() - 1; i >= 0; i -= 7){
+            post.add(new Posts(allPosts.get(i), allPosts.get(i - 1), allPosts.get(i - 2), allPosts.get(i - 3), allPosts.get(i - 4), allPosts.get(i - 5), allPosts.get(i - 6)));
         }
         setListAdapter(new PostsAdapter(this, R.layout.activity_posts, post));
     }

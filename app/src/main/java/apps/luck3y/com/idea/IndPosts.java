@@ -180,6 +180,7 @@ public class IndPosts extends ListActivity implements View.OnClickListener {
 
                 //add content and user to arraylist
 
+                allPosts.add(json.getString(Config.button_text));
                 allPosts.add(json.getString(Config.like_count));
                 allPosts.add(json.getString(Config.post_date));
                 allPosts.add(json.getString(Config.post_topic));
@@ -192,8 +193,8 @@ public class IndPosts extends ListActivity implements View.OnClickListener {
             }
         }
         ArrayList<Posts> post = new ArrayList<Posts>();
-        for(int i = allPosts.size() - 1; i >= 0; i -= 6){
-            post.add(new Posts(allPosts.get(i), allPosts.get(i-1), allPosts.get(i-2), allPosts.get(i-3), allPosts.get(i-4), allPosts.get(i-5)));
+        for(int i = allPosts.size() - 1; i >= 0; i -= 7){
+            post.add(new Posts(allPosts.get(i), allPosts.get(i-1), allPosts.get(i-2), allPosts.get(i-3), allPosts.get(i-4), allPosts.get(i-5), allPosts.get(i-6)));
         }
         System.out.println("here: " + allPosts);
 
